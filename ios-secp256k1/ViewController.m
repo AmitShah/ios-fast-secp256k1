@@ -63,8 +63,10 @@ static int custom_nonce_function_rfc6979(unsigned char *nonce32, const unsigned 
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    //[self testSignature];
+    [self testSignature];
+    [self testSignatureVerification];
     [self testSignatureVerification2];
+    
     // Do any additional setup after loading the view, typically from a nib.
 }
 
@@ -153,42 +155,52 @@ static int custom_nonce_function_rfc6979(unsigned char *nonce32, const unsigned 
 
 -(void) testSignatureVerification2{
     secp256k1_context * ctx = secp256k1_context_create(SECP256K1_CONTEXT_SIGN | SECP256K1_CONTEXT_VERIFY);
-    
-    secp256k1_ecdsa_recoverable_signature signature;
-    secp256k1_pubkey pubkey;
-    char msg[32];
-    memcpy(msg, [@"b0312ee1e07860ab62a4df71d1dd03567911899f548de970e474d3f0dc2c3403" dataFromHexString].bytes,32);
-    int v = 28; //must be set correctly between 0 and 3
-    char sig[64]; //r and s appended (32 bytes each)
-    memcpy(sig,[@"759b84d432f0feb92eac6c23cd9433aa4730e678ae5857a28167256b47fe841f5e43c02c7f385599a934a07b3f62ee642634d5d3f19909dbd244ef662df6a718" dataFromHexString].bytes,
-           64);
-    
-    secp256k1_ecdsa_recoverable_signature_parse_compact(ctx,&signature,
-                                                        &sig,v-27);
-    secp256k1_ecdsa_recover(ctx,&pubkey,&signature,msg);
-    
-    size_t output_size = 65;
-    unsigned char output[65];
-    
-    secp256k1_ec_pubkey_serialize(ctx,
-                                  output,
-                                  &output_size,
-                                  &pubkey,
-                                  SECP256K1_EC_UNCOMPRESSED
-                                  );
-    
-    char address[32];
-    uint8_t ss[64];
-    memcpy(ss, output+1,64);
-    
-    keccack_256(address, 32,ss, 64);
-    
-    
-    NSString * stringAddress = [[NSString hexStringWithData:address ofLength:32] substringFromIndex:24];
-    NSLog(stringAddress);
-    if([stringAddress isEqualToString:@"be862ad9abfe6f22bcb087716c7d89a26051f74c"]){
-        NSLog(@"recovered address (remove first 24 characters):%@",stringAddress);
+    NSDate *methodStart = [NSDate date];
+    for (int i = 0; i < 1000; i++){
+        char* elem = [[NSString stringWithFormat:@"element"] UTF8String];
+        
+        char hashedTransaction[32];
+        keccack_256(hashedTransaction, 32, elem , 7);
+        
+        secp256k1_ecdsa_recoverable_signature signature;
+        secp256k1_pubkey pubkey;
+//        char msg[32];
+//        memcpy(msg, [@"b0312ee1e07860ab62a4df71d1dd03567911899f548de970e474d3f0dc2c3403" dataFromHexString].bytes,32);
+        int v = 28; //must be set correctly between 0 and 3
+        char sig[64]; //r and s appended (32 bytes each)
+        memcpy(sig,[@"759b84d432f0feb92eac6c23cd9433aa4730e678ae5857a28167256b47fe841f5e43c02c7f385599a934a07b3f62ee642634d5d3f19909dbd244ef662df6a718" dataFromHexString].bytes,
+               64);
+        
+        secp256k1_ecdsa_recoverable_signature_parse_compact(ctx,&signature,
+                                                            &sig,v-27);
+        secp256k1_ecdsa_recover(ctx,&pubkey,&signature,hashedTransaction);
+        
+        size_t output_size = 65;
+        unsigned char output[65];
+        
+        secp256k1_ec_pubkey_serialize(ctx,
+                                      output,
+                                      &output_size,
+                                      &pubkey,
+                                      SECP256K1_EC_UNCOMPRESSED
+                                      );
+        
+        char address[32];
+        uint8_t ss[64];
+        memcpy(ss, output+1,64);
+        
+        keccack_256(address, 32,ss, 64);
+        
+        
+        NSString * stringAddress = [[NSString hexStringWithData:address ofLength:32] substringFromIndex:24];
+        //NSLog(stringAddress);
+        if([stringAddress isEqualToString:@"be862ad9abfe6f22bcb087716c7d89a26051f74c"]){
+            //NSLog(@"recovered address (remove first 24 characters):%@",stringAddress);
+        }
     }
+    NSDate *methodFinish = [NSDate date];
+    NSTimeInterval executionTime = [methodFinish timeIntervalSinceDate:methodStart];
+    NSLog(@"executionTime = %f", executionTime);
     secp256k1_context_destroy(ctx);
 }
 

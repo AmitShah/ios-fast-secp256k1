@@ -16,7 +16,7 @@
 		3FDA449920BE113100AD9042 /* ios_secp256k1Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FDA449820BE113100AD9042 /* ios_secp256k1Tests.m */; };
 		3FDA44A420BE113200AD9042 /* ios_secp256k1UITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FDA44A320BE113200AD9042 /* ios_secp256k1UITests.m */; };
 		3FDA44B320BE115E00AD9042 /* secp256k1.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FDA44B220BE115E00AD9042 /* secp256k1.framework */; };
-		3FDA44B520BE116800AD9042 /* keccak-universal.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FDA44B420BE116800AD9042 /* keccak-universal.a */; };
+		3FDA44B720BE1AD900AD9042 /* keccak-tiny-lib.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FDA44B620BE1AD900AD9042 /* keccak-tiny-lib.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -55,6 +55,7 @@
 		3FDA44A520BE113200AD9042 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3FDA44B220BE115E00AD9042 /* secp256k1.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = secp256k1.framework; path = "../ios-secp256k1-master/framework/secp256k1.framework"; sourceTree = "<group>"; };
 		3FDA44B420BE116800AD9042 /* keccak-universal.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "keccak-universal.a"; path = "../keccak-tiny-singlefile/keccak-universal.a"; sourceTree = "<group>"; };
+		3FDA44B620BE1AD900AD9042 /* keccak-tiny-lib.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "keccak-tiny-lib.a"; path = "../keccak-tiny-singlefile/keccak-tiny-lib.a"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -62,7 +63,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3FDA44B520BE116800AD9042 /* keccak-universal.a in Frameworks */,
+				3FDA44B720BE1AD900AD9042 /* keccak-tiny-lib.a in Frameworks */,
 				3FDA44B320BE115E00AD9042 /* secp256k1.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -142,6 +143,7 @@
 		3FDA44B120BE115E00AD9042 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				3FDA44B620BE1AD900AD9042 /* keccak-tiny-lib.a */,
 				3FDA44B420BE116800AD9042 /* keccak-universal.a */,
 				3FDA44B220BE115E00AD9042 /* secp256k1.framework */,
 			);
